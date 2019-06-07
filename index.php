@@ -7,13 +7,15 @@ error_reporting(-1);
 $pdo = new PDO('mysql:dbname=phptest;host=localhost', 'root', 87456123);
 $result = $pdo->query("SELECT * FROM pet");
 $row = $result->fetchAll();
-$name = $_POST['name'];
-$surname = $_POST['surname'];
+$arr = $_POST;
+//$surname = $_POST['surname'];
 $sql = "INSERT INTO pet (name, breed) VALUES (:name, :surname)";
 $stmt = $pdo->prepare($sql);
-$stmt->execute($_POST);
-unset($_POST);
-unset($sql);
+if(!empty($arr)) {
+  $stmt->execute($arr);
+  unset($arr);
+  header('Location: /index.php');
+}
 static $autoincrement = 0;
 ?>
 <!doctype html>
