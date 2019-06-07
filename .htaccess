@@ -1,0 +1,4 @@
+#Apache2 settings
+Options Indexes
+DirectoryIndex index.php
+#php_flag short_open_tag on
