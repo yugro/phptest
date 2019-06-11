@@ -11,10 +11,10 @@ $arr = $_POST;
 //$surname = $_POST['surname'];
 $sql = "INSERT INTO pet (name, breed) VALUES (:name, :surname)";
 $stmt = $pdo->prepare($sql);
-if(!empty($arr)) {
+if (!empty($arr)) {
   $stmt->execute($arr);
   unset($arr);
- header('Location: /index.php');
+  header('Location: /index.php');
 }
 static $autoincrement = 0;
 ?>
@@ -76,15 +76,18 @@ static $autoincrement = 0;
 
 <div id="specialistTest">
   <?php
-  $a=NULL;
-  if(true):
-  echo "it's true\n<br>";
-  echo "second row without {}";
-  echo "<br>".is_bool($a);
-  echo "<br>".gettype($a) ;
-  elseif (false):
-  echo "it's shouldn't work";
-  endif;
+  $a = ini_get("post_max_size");
+  $param = $a{strlen($a) - 1};
+  $a=(int) $a;
+  switch ($param):
+    case 'G':
+      echo 'your post_max_size is ' . ($a *= 1024) . ' MBytes';
+    case 'M':
+      echo ' your post_max_size is ' . ($a *= 1024) . ' KBytes';
+    case 'K':
+      echo ' your post_max_size is ' . ($a *= 1024) . ' Bytes';
+  endswitch;
+
   ?>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
