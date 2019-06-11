@@ -14,7 +14,7 @@ $stmt = $pdo->prepare($sql);
 if(!empty($arr)) {
   $stmt->execute($arr);
   unset($arr);
-  header('Location: /index.php');
+ header('Location: /index.php');
 }
 static $autoincrement = 0;
 ?>
@@ -38,7 +38,7 @@ static $autoincrement = 0;
 <h3>This is page for testing php!!!</h3>
 <div class="row">
     <div class="col-lg-4">
-        <form action="index.php" method="post">
+        <form action="" method="post">
             <legend for="name">Your name</legend>
             <input type="text" id=name" name="name">
             <legend for="surname">Your surname</legend>
@@ -72,6 +72,20 @@ static $autoincrement = 0;
           <?php } ?>
         </table>
     </div>
+</div>
+
+<div id="specialistTest">
+  <?php
+  $a=NULL;
+  if(true):
+  echo "it's true\n<br>";
+  echo "second row without {}";
+  echo "<br>".is_bool($a);
+  echo "<br>".gettype($a) ;
+  elseif (false):
+  echo "it's shouldn't work";
+  endif;
+  ?>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
