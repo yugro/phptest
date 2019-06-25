@@ -13,3 +13,9 @@ th, td {
   counter-increment: increment; }
   #increment:before {
     content: counter(increment); }
+
+h1#header {
+  text-align: center; }
+
+#books td:nth-child(2) {
+  display: none; }

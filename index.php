@@ -1,22 +1,62 @@
 <?php
 error_reporting(-1);
-//echo "world";
-//echo "\t";
-//echo "hello";
-
-$pdo = new PDO('mysql:dbname=phptest;host=localhost', 'root', 87456123);
-$result = $pdo->query("SELECT * FROM pet");
-$row = $result->fetchAll();
-$arr = $_POST;
-//$surname = $_POST['surname'];
-$sql = "INSERT INTO pet (name, breed) VALUES (:name, :surname)";
-$stmt = $pdo->prepare($sql);
-if (!empty($arr)) {
-  $stmt->execute($arr);
-  unset($arr);
-  header('Location: /index.php');
+const PATH_LOG = "log/path.log";
+//echo $_COOKIE["c"];
+//include "inc/log.inc.php";
+if (isset($_COOKIE['user'])) {
+  $info = unserialize(base64_decode($_COOKIE['user']));
+  if (date('d-m-Y') != date('d-m-Y', $info['time'])) {
+    $info['visits']++;
+  }
+  $info['time'] = time();
 }
-static $autoincrement = 0;
+else {
+  $info = [
+    'name' => 'John',
+    'nick' => 'terminator',
+    'visits' => 1,
+    'time' => time(),
+  ];
+}
+$user = base64_encode(serialize($info));
+setcookie("user", $user);
+
+include_once "./lib/functions.php";
+//set_error_handler("myError", E_ALL);
+$title = 'my first site';
+$header = 'Welcome guest';
+if (isset($_GET['id'])) {
+  $id = strtolower(strip_tags(trim($_GET['id'])));
+  switch ($id) {
+    case 'table':
+      $title = "Data table";
+      $header = "this is table of our guests";
+      break;
+    case 'tools':
+      $title = "this is new super tool";
+      $header = "this is tool to make table of multiplication";
+      break;
+    case 'contact':
+      $title = "Contact info";
+      $header = "contact us";
+      break;
+    case 'calc':
+      $title = "calculator";
+      $header = "this is tool for calculation";
+      break;
+  }
+}
+
+try{
+$pdo=new PDO('mysql:host=localhost;dbname=phptest','root', '87456123');
+$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+$result=$pdo->query('SELECT * from users');
+foreach ($result as $row){
+//    var_dump($row);
+}
+}catch (PDOException $e){
+exit($e->getMessage());
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -25,70 +65,57 @@ static $autoincrement = 0;
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     <link rel="stylesheet" href="css/sass.css">
-    <title>Hello, world!</title>
+    <title><?php echo $title ?></title>
 </head>
 <body>
-<h3>This is page for testing php!!!</h3>
+<h1><?php echo "hello {$info['name']}. You are here for the  {$info['visits']} time and your last vizit was at " . date('d-m-Y : H-m-s', $info['time']) ?></h1>
+<h3><?php echo $header . ' now is ' . date('h-m-s') . 'php self ' . $_SERVER['PHP_SELF'] ?></h3>
 <div class="row">
-    <div class="col-lg-4">
-        <form action="" method="post">
-            <legend for="name">Your name</legend>
-            <input type="text" id=name" name="name">
-            <legend for="surname">Your surname</legend>
-            <input type="text" id=surname" name="surname">
-            <br>
-            <button type="submit" class="btn btn-primary">Click me</button>
-        </form>
-    </div>
-    <div class="col-lg-4">
-        <h2>Results</h2>
-        <table>
-          <?php foreach ($row as $key => $value) { ?>
-              <tr>
-                  <th>No.</th>
-                  <th>Name</th>
-                  <th>Surname</th>
-                  <th>Delete</th>
-              </tr>
-              <tr>
-                  <td id="increment"></td>
-                  <td>
-                    <?php echo $value['name'] ?>
-                  </td>
-                  <td>
-                    <?php echo $value['breed'] ?>
-                  </td>
-                  <td id="delete">
-                      X
-                  </td>
-              </tr>
-          <?php } ?>
-        </table>
-    </div>
+  <?php
+  if (isset($_GET['id'])) {
+    switch ($id) {
+      case 'table':
+        include './layout/table.php';
+        break;
+      case 'tools':
+        include './layout/tools.php';
+        break;
+      case 'contact':
+        include './layout/contact.php';
+        break;
+      case 'calc':
+        include './layout/calc.php';
+        break;
+      case 'fileupload':
+        include './layout/file.php';
+        break;
+      default:
+        include './layout/index.inc.php';
+    }
+  }
+  else {
+    include './layout/index.inc.php';
+  }
+  ?>
 </div>
 
 <div id="specialistTest">
   <?php
-  $a = ini_get("post_max_size");
-  $param = $a{strlen($a) - 1};
-  $a=(int) $a;
-  switch ($param):
-    case 'G':
-      echo 'your post_max_size is ' . ($a *= 1024) . ' MBytes';
-    case 'M':
-      echo ' your post_max_size is ' . ($a *= 1024) . ' KBytes';
-    case 'K':
-      echo ' your post_max_size is ' . ($a *= 1024) . ' Bytes';
-  endswitch;
+  include "./layout/menu.inc.php";
 
   ?>
+
+</div>
+<div>
+  <?php //phpinfo(); ?>
+</div>
+<div>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -101,7 +128,6 @@ static $autoincrement = 0;
         crossorigin="anonymous"></script>
 </body>
 </html>
-
 
 
 

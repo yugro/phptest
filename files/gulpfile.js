@@ -19,14 +19,14 @@ gulp.task('sass:watch', function(){
 });
 
 gulp.task('browser-sync', function() {
-  browserSync.init(["./*.php","./css/*.css", "*.html"], {
-    // server: {
-    //   baseDir: "./html"
-    // }
-     proxy: "phptest.loc"
+  browserSync.init(["./css/*.css", "*.html"], {
+    server: {
+      baseDir: "."
+    }
+    //  proxy: "exam1.loc"
 
-      });
-  });
+  })
+});
 
 gulp.task('watch', gulp.series('sass', gulp.parallel('sass:watch', 'browser-sync')));
 
