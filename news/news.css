@@ -1,0 +1,9 @@
+body{
+
+}
+td{
+  border: 1px solid black;
+}
+td:first-of-type{
+  display: none;
+}
