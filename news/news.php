@@ -1,5 +1,8 @@
 <?php
 require 'NewsDB.php';
+require 'DbConn.php';
+$d=new DbConn();
+$db=new NewsDB($d);
 $title = 'News';
 ?>
 <!DOCTYPE html>
@@ -40,19 +43,18 @@ DOC;
         </tr>
 
       <?php
-      foreach (NewsDB::dbGet() as $new):
+      foreach ($db->DBget() as $new):
         echo '<tr>';
-
-
         foreach ($new as $key => $value):
           echo '<td>';
           echo $value;
-        endforeach;
-        echo '</td>';
 
+        echo '</td>';
+        endforeach;
         echo "<td><form method='get' action='deleteNews.php'><button type='submit' value='{$new["id"]}' name='del' >Delete</button></form></td>";
-        echo '</tr>';
-      endforeach;
+
+      echo '</tr>';
+ endforeach;
       ?>
     </table>
 <?php } ?>
