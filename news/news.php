@@ -1,8 +1,7 @@
 <?php
 require 'NewsDB.php';
-require 'DbConn.php';
-$d=new DbConn();
-$db=new NewsDB($d);
+//require 'DbConn.php';
+
 $title = 'News';
 ?>
 <!DOCTYPE html>

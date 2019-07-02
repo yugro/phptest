@@ -9,8 +9,10 @@ class DbConn {
   const   PASSWORD = 87456123;
 
   const TABLE = 'news';
+  public function __construct() {
+  }
 
-  public function dbConn() {
+  public static function dbConn() {
     // TODO: Implem ent dbConn() method.
     $a= new PDO('mysql:host=localhost; dbname=phptest', 'root', 87456123);
     return $a;

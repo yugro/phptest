@@ -1,12 +1,15 @@
 <?php
 require 'INewsDB.php';
+require 'DbConn.php';
+
+
 
 class NewsDB implements INewsDB {
   public $dbConn;
 
-  function __construct(DbConn $dbConn){
+  function __construct($d){
   // TODO: Implement dbConn() metho)
-$this->dbConn=$dbConn->dbConn();
+$this->dbConn=$d;
   }
 
   //  const DB = 'phptest';
@@ -48,7 +51,8 @@ $this->dbConn=$dbConn->dbConn();
 
   public function dbSave(array $a) {
     $query = 'INSERT INTO news (title, body, pdate, source) VALUES (?, ?, ?, ?)';
-    return $this->dbConn->prepare($query)->execute($a);
+    $b=$this->dbConn->prepare($query);
+    return $b->execute($a);
 
   }
 
@@ -67,3 +71,4 @@ $this->dbConn=$dbConn->dbConn();
     return $a;
   }
 }
+$db=new NewsDB(DbConn::dbConn());
