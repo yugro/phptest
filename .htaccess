@@ -1,4 +1,13 @@
 #Apache2 settings
-Options Indexes
-DirectoryIndex index.php
+#Options Indexes
+#DirectoryIndex index.php
 #php_flag short_open_tag on
+
+AddDefaultCharset utf-8
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule (.*) index.php?url=$1 [QSA]
